@@ -1,19 +1,21 @@
+import * as userModel from "../models/userModel.js";
+
 const handleResponse = (res, status, data) => {
   res.status(status).json(data);
 };
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res, next) => {
   try {
-    const users = await getAllUsers();
+    const users = await userModel.getAllUsers();
     handleResponse(res, 200, users);
   } catch (error) {
-    handleResponse(res, 500, { message: error.message });
+    next(error);
   }
 };
 
-export const getUserById = async (req, res) => {
+export const getUserById = async (req, res, next) => {
   try {
-    const user = await getUserById(req.params.id);
+    const user = await userModel.getUserById(req.params.id);
     if (!user) {
       return handleResponse(res, 404, { message: "User not found" });
     }
@@ -23,24 +25,24 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
   try {
-    const user = await createUser(req.body.name, req.body.email);
+    const user = await userModel.createUser(req.body.name, req.body.email);
     if (!user) {
       return handleResponse(res, 400, { message: "User not created" });
     }
-    handleResponse(res, 200, user);
+    handleResponse(res, 201, user);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
   try {
     const { name, email } = req.body;
-    const user = await updateUser(req.params.id, name, email);
+    const user = await userModel.updateUser(req.params.id, name, email);
     if (!user) {
-      return handleResponse(res, 400, { message: "User not updated" });
+      return handleResponse(res, 404, { message: "User not found" });
     }
     handleResponse(res, 200, user);
   } catch (error) {
@@ -48,11 +50,11 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
   try {
-    const user = await deleteUser(req.params.id);
+    const user = await userModel.deleteUser(req.params.id);
     if (!user) {
-      return handleResponse(res, 400, { message: "User not deleted" });
+      return handleResponse(res, 404, { message: "User not found" });
     }
     handleResponse(res, 200, user);
   } catch (error) {

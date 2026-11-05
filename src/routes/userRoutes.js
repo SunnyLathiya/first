@@ -14,9 +14,9 @@ import {
 const router = express.Router();
 
 router.get("/users", getAllUsers);
-router.get("/users/:id", getUserById);
+router.get("/users/:id", validateUserById, getUserById);
 router.post("/users", validateUser, createUser);
-router.put("/users/:id", validateUserById, updateUser);
-router.delete("/users/:id", deleteUser);
+router.put("/users/:id", validateUserById, validateUser, updateUser);
+router.delete("/users/:id", validateUserById, deleteUser);
 
 export default router;

@@ -6,7 +6,7 @@ const userSchema = joi.object({
 });
 
 const userByIdSchema = joi.object({
-  id: joi.string().required(),
+  id: joi.string().pattern(/^\d+$/).required(),
 });
 
 export const validateUser = (req, res, next) => {
@@ -22,7 +22,9 @@ export const validateUser = (req, res, next) => {
 export const validateUserById = (req, res, next) => {
   const { error } = userByIdSchema.validate(req.params);
   if (error) {
-    return next(new Error(error.message));
+    return res
+      .status(400)
+      .json({ status: 400, message: error.details[0].message });
   }
   next();
 };

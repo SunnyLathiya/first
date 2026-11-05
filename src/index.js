@@ -8,12 +8,6 @@ import createUserTable from "./data/createUserTable.js";
 
 dotenv.config();
 
-console.log(process.env.PORT);
-console.log(process.env.USER);
-console.log(process.env.PASSWORD);
-console.log(process.env.HOST);
-console.log(process.env.DATABASE);
-
 const app = express();
 const PORT = 5000;
 
